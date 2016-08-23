@@ -1,0 +1,26 @@
+Quick Links:
+
+McLean IT desk: 781-416-8940
+Psiturk quickstart: https://psiturk.org/quick_start/
+Psiturk documentation: http://psiturk.readthedocs.io/en/latest/index.html
+Jspsych documentation: http://docs.jspsych.org/
+Sandbox: https://workersandbox.mturk.com/
+
+
+Notes:
+
+8/16/16 
+•	Downloaded permissions for user
+•	Uninstalled psiturk because I already ran through the setup example so I was getting an error. Then it was telling me that it couldn’t find the setup_example folder. 
+•	Reinstalled psiturk it’s now a hidden folder on mlm (use command “ls –a” to see hidden folders)
+•	Configured the global config file (~/.psiturkconfig)
+•	Added table name.
+•	***In local config file, host is set to localhost currently, be sure to change it to 0.0.0.0 or the ip address or hostname of this computer when ready to collect data. Also set debug to FALSE to prevent security holes.***
+•	***Need to figure out what the certfile thing is in the local config
+
+8/23/16
+•	Psiturk needs the gnu version of readline but it defaults to libedit when I try to install it. To fix, I went into /Library/Python/2.7/site-packages/psiturk/psiturk_shell.py and changed “import readline” to “import gnureadline as readline” See https://github.com/NYUCCL/psiTurk/issues/173
+•	Quickstart step 6 no problems
+•	Problem: I can view the ad on the workers sandbox, accept the hit, but when it goes to the experiment I get an error (Experimenter error: Experiment server unreachable). See https://groups.google.com/forum/#!topic/psiturk/oTz0JI32qF0 Solution will likely involve contacting IT and having them change settings to allow people from outside of the network get to the port. 
+•	Spoke with someone at IT and they put in a request to security to open up a port on the computer. Will probably never hear back from them. 
+
