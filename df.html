@@ -1,0 +1,212 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Directed Forgetting</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="jspsych-5.0.3/jspsych.js"></script>
+    <script src="jspsych-5.0.3/plugins/jspsych-text.js"></script>
+	<script src="jspsych-5.0.3/plugins/jspsych-single-stim.js"></script>
+	<script src="jspsych-5.0.3/plugins/jspsych-survey-text.js"></script> 
+	<script src="jspsych-5.0.3/plugins/jspsych-xab.js"></script>
+    <link href="jspsych-5.0.3/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+	<style>
+	p {font-size: 40px; padding-top: 200px; line-height: 110%; margin:auto;}
+	</style>
+  </head>
+  <body>
+  </body>
+  <script>
+  
+  
+  /* define welcome message block*/
+  var welcome_block = {
+	  type: "text",
+	  text: "<p>Welcome to the experiment.<br /><br /> Press any key to begin.</p>"
+  };
+  
+  /* define the first instructions block*/
+  var instructions_block1 = {
+	  type: "text",
+	  text: "<p>In this experiment, you will shown a series of words followed by an instruction to 'Remember' or 'Forget' the word that came before. <br /><br /> Your job is to remember the words that are followed by a 'Remeber' cue and forget the words that are followed by the 'Forget' cue.<br /><br />Press any key to continue</p>",
+  };
+  
+  /* define the second instructions block*/
+  var instructions_block2 = {
+	  type: "text",
+	  text: "<p>For example, you may see the word <b>cat</b> displayed on the screen followed by <b>Remember</b>. In this case, you should try to remember the word 'cat' throughout the experiment.<br /><br />You might also see the word <b>dog</b> displayed on the screen followed by <b>Forget</b>. In this case, you should try to not remember the word 'dog' throughout the experiment.<br /><br />Press any key to continue</p>"	  
+  }; 
+  
+
+  /* Creating the stimulus array.*/
+  
+   function MyStim(word,instruction) {
+	  this.word = word;
+	  this.instruction = instruction;
+  }; 
+     var data = [new MyStim("Cat","Forget"), new MyStim("Dog","Remember"), new MyStim("Sour Patch Kids","Never Forget"), new MyStim("Cookies", "Remember")]
+  
+/*Shuffle function */
+
+  function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    };
+
+    return array;
+  };
+  
+  /* Shuffles the array*/
+  
+  shuffle(data);
+  
+
+  // Shows the word 
+  /* since the stupid text plugin is meant for reaction time stuff, using single stim to show the text. The word is on the screen for 250ms and there is a 1750ms delay (since the full trial lasts 2000ms and on 250ms of those the stimulus is presented). */
+
+
+  //var Stim = data[0];
+  var present_words_block = {
+	  type: "single-stim",
+	  stimulus: function() {
+		  return "<p style= font-size:100px;text-align:center;padding-top:300px;>"+data[0].word+"</p>";
+      },
+  	  is_html: true,
+  	  timing_stim: 250,
+	  timing_response: 2000,
+	  response_ends_trial: false,
+  };
+
+/*
+  
+  var present_words_trial1 = {
+	  type: "single-stim",
+	  stimulus: function() {
+		  return "<p style= font-size:100px;text-align:center>"+data[0].word+"</p>";
+      },
+  	  is_html: true,
+  	  timing_stim: 250,
+	  timing_response: 2000,
+	  response_ends_trial: false,
+  };
+  var present_words_trial2 = {
+	  type: "single-stim",
+	  stimulus: function() {
+		  return "<p style= font-size:100px;text-align:center>"+data[1].word+"</p>";
+      },
+  	  is_html: true,
+  	  timing_stim: 250,
+	  timing_response: 2000,
+	  response_ends_trial: false,
+  };
+  
+   var present_words_block = {
+	   timeline:[
+		   {present_words_trial1},
+		   {present_words_trial2},
+	   ],
+	   loop_function: true,
+   };
+  */
+
+  // define the recall instructions
+  var recall_instructions_block = {
+	  type: "text",
+	  text: "<p>You have finished that portion of the task! Now, please type all of the words that you remember being displayed <b>regardless</b> of the 'remember' or 'forget' instructions.<br /><br />For example, if you remember seeing the word 'dog' but know that it was followed by a 'Forget' instruction, you should still type 'dog.'<br /><br />Press any key to continue</p>"  
+  }; 
+
+  
+/* define the first recognition instructions*/
+  var recog_instructions_block1 = {
+	  type: "text",
+	  text: "<p>Great! In the final portion of this task, you will be presented with a series of words. The words will be a mix of words presented in the first portion of the task and new words. Your job is to tell us whether you think the word was presented in the first portion of the task, regardless of the instruction that followed it.<br /><br />You will indicate whether you saw the word by pressing the 'p' key for words that you saw in the first phase and pressing the 'q' key for words that you did not.<br /><br />Press any key to continue</p>"
+  };
+  
+  /* define the second recognition instructions*/
+  var recog_instructions_block2 = {
+	  type: "text",
+	  text: "<p>Remember that you are indicating whether you saw the word previously, <b>regardless of the instruction to remember or forget.</b> So, for example if the word 'dog' is presented, and you remember seeing the word 'dog' but it was followed by an instruction to forget, you would still indicate that you saw the word by pressing 'p'.<br /><br />Remember to press the 'p' key for words you have seen and the 'q' key for words that you have not.<br /><br />Press any key to continue onto the task</p>"
+  };
+  
+  /* users can type in a textbox and submit their answers*/
+  /* request that users either separate by space or comma*/
+  var type_answers_block = {
+    type: 'survey-text',
+    questions: ["Please type ALL words that you remember seeing. Please separate all words with a SPACE."],
+	  rows: [17],
+	  columns: [70]
+  };
+  
+/*  "The experiment was divided into two separate parts with a short break in between. The first part of the experiment (study phase) consisted of 80 trials and a single trial lasted 6000 ms starting with a fixation mark. After a foreperiod of 1000 ms, the stimulus was displayed for 250 ms. Then after a 1750 ms break, R or F instruction was presented for 250 ms. A set of forty different words was used in each of the two (R, F) experimental conditions. Prior to the study phase, participants were directed to follow the instruction to commit only TBR items to memory and to forget TBF items. The order of experimental trials was pseudo-random with the constraint of no more than three consecutive trials with the same type of instruction." Norwicka_etal_2009 */
+  var 
+  test_stimuli = [
+	  {
+		stimulus: 'img/blue.png',
+        data: {response: 'go'}
+ 	   },
+    {
+		stimulus: 'img/orange.png',
+	    data: {response: 'no-go'}
+     }
+  ];
+  
+  var all_trials = jsPsych.randomization.repeat(test_stimuli, 10);
+  
+  var post_trial_gap = function() {
+    return Math.floor( Math.random() * 1500 ) + 750;
+  }
+  
+  //Maybe have two test blocks, on the first they see the first word on the second they see the second. The two test blocks are in one timeline?
+  
+  var test_block = {
+    type: "single-stim",
+    choices: ['F'],
+    timing_response: 1500,
+    timing_post_trial: post_trial_gap,
+    on_finish: function(data){
+      var correct = false;
+      if(data.response == 'go' && data.rt > -1){
+        correct = true;
+      } else if(data.response == 'no-go' && data.rt == -1){
+        correct = true;
+      }
+      jsPsych.data.addDataToLastTrial({correct: correct});
+    },
+    timeline: all_trials
+  };
+  
+  /* create the timeline array--MIGHT HAVE TO MOVE THESE UP TO THEIR RESPECTIVE CODE AND ADD THE LOOP ON THE PRESENT_WORDS BLOCK????*/
+  var timeline = [];
+  timeline.push(welcome_block);
+  timeline.push(instructions_block1);
+  timeline.push(instructions_block2);
+  timeline.push(present_words_block);
+  timeline.push(recall_instructions_block);
+  timeline.push(type_answers_block);
+  timeline.push(recog_instructions_block1);
+  timeline.push(recog_instructions_block2);
+
+  
+  /* start the experiment */
+ /* jsPsych.init({
+	  timeline: timeline,
+	  fullscreen: true
+  });*/
+  jsPsych.init({
+	timeline: timeline,
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+  </script>
+</html>
