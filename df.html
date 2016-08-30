@@ -43,7 +43,7 @@
 	  this.word = word;
 	  this.instruction = instruction;
   }; 
-     var data = [new MyStim("Cat","Forget"), new MyStim("Dog","Remember"), new MyStim("Sour Patch Kids","Never Forget"), new MyStim("Cookies", "Remember")]
+     var data = [new MyStim("Cat","Forget"), new MyStim("Dog","Remember"), new MyStim("Sour Patch Kids","Never Forget"), new MyStim("Cookies","Remember"), new MyStim("Woogah", "Remember"), new MyStim("WoogWoog","Forget")]
   
 /*Shuffle function */
 
@@ -66,27 +66,83 @@
     return array;
   };
   
-  /* Shuffles the array*/
+  // Shuffles the array
   
   shuffle(data);
-  
+
 
   // Shows the word 
   /* since the stupid text plugin is meant for reaction time stuff, using single stim to show the text. The word is on the screen for 250ms and there is a 1750ms delay (since the full trial lasts 2000ms and on 250ms of those the stimulus is presented). */
 
 
-  //var Stim = data[0];
-  var present_words_block = {
-	  type: "single-stim",
-	  stimulus: function() {
-		  return "<p style= font-size:100px;text-align:center;padding-top:300px;>"+data[0].word+"</p>";
-      },
-  	  is_html: true,
-  	  timing_stim: 250,
-	  timing_response: 2000,
-	  response_ends_trial: false,
+  function getword(r){
+	  return "<p style= font-size:100px;text-align:center;padding-top:300px;>"+data[r].word+"</p>";
+  };
+  
+  function getinstruct(y){
+  	return "<p style= font-size:100px;text-align:center;padding-top:300px;>"+data[y].instruction+"</p>";
   };
 
+  
+//  while (i < 80){
+//	  timeline.push(present_words_block);
+//	  place++;
+//	  i++;
+//  }
+ // while (i < 80){
+//	  timeline.push(present_words_block);
+ // };
+
+ 
+ function getpresent (i)  {
+	 return {
+	 type: "single-stim",
+   stimulus: "<p style= font-size:100px;text-align:center;padding-top:300px;>"+data[i].word+"</p>",
+   is_html: true,
+   timing_stim: 250,
+   timing_response: 2000,
+   response_ends_trial: false,
+	 }
+   };
+   
+   function getinstruct (i)  {
+  	 return {
+  	 type: "single-stim",
+     stimulus: "<p style= font-size:100px;text-align:center;padding-top:300px;>"+data[i].instruction+"</p>",
+     is_html: true,
+     timing_stim: 250,
+     timing_response: 2000,
+     response_ends_trial: false,
+  	 }
+     };
+
+//var present_words_block = {
+//	  type: "single-stim",
+//	  stimulus: getword(place),
+// 	  is_html: true,
+//  	  timing_stim: 250,
+//	  timing_response: 2000,
+//	  response_ends_trial: false,
+//  };
+  
+  
+//  var present_instruct_block = {
+//	  type: "single-stim",
+//	  stimulus: getinstruct(i),
+//	  is_html: true,
+//	  timing_stim: 250,
+//	  timing_response: 2000,
+//	  response_ends_trial: false,
+//  };
+  
+  //var i = 1;
+  //var place = 0;
+ // while (i < 80){
+//	  timeline.push(present_words_block);
+//	  place++;
+//	  i++;
+//  }
+  
 /*
   
   var present_words_trial1 = {
@@ -148,49 +204,22 @@
   };
   
 /*  "The experiment was divided into two separate parts with a short break in between. The first part of the experiment (study phase) consisted of 80 trials and a single trial lasted 6000 ms starting with a fixation mark. After a foreperiod of 1000 ms, the stimulus was displayed for 250 ms. Then after a 1750 ms break, R or F instruction was presented for 250 ms. A set of forty different words was used in each of the two (R, F) experimental conditions. Prior to the study phase, participants were directed to follow the instruction to commit only TBR items to memory and to forget TBF items. The order of experimental trials was pseudo-random with the constraint of no more than three consecutive trials with the same type of instruction." Norwicka_etal_2009 */
-  var 
-  test_stimuli = [
-	  {
-		stimulus: 'img/blue.png',
-        data: {response: 'go'}
- 	   },
-    {
-		stimulus: 'img/orange.png',
-	    data: {response: 'no-go'}
-     }
-  ];
+
   
-  var all_trials = jsPsych.randomization.repeat(test_stimuli, 10);
-  
-  var post_trial_gap = function() {
-    return Math.floor( Math.random() * 1500 ) + 750;
-  }
-  
-  //Maybe have two test blocks, on the first they see the first word on the second they see the second. The two test blocks are in one timeline?
-  
-  var test_block = {
-    type: "single-stim",
-    choices: ['F'],
-    timing_response: 1500,
-    timing_post_trial: post_trial_gap,
-    on_finish: function(data){
-      var correct = false;
-      if(data.response == 'go' && data.rt > -1){
-        correct = true;
-      } else if(data.response == 'no-go' && data.rt == -1){
-        correct = true;
-      }
-      jsPsych.data.addDataToLastTrial({correct: correct});
-    },
-    timeline: all_trials
-  };
+
   
   /* create the timeline array--MIGHT HAVE TO MOVE THESE UP TO THEIR RESPECTIVE CODE AND ADD THE LOOP ON THE PRESENT_WORDS BLOCK????*/
   var timeline = [];
   timeline.push(welcome_block);
   timeline.push(instructions_block1);
   timeline.push(instructions_block2);
-  timeline.push(present_words_block);
+ 
+  for (var i = 0; i<5; i++){  
+	  timeline.push(getpresent(i));
+	  timeline.push(getinstruct(i));
+  };
+  
+//  timeline.push(present_words_block);
   timeline.push(recall_instructions_block);
   timeline.push(type_answers_block);
   timeline.push(recog_instructions_block1);
