@@ -27,11 +27,11 @@ Notes:
 8/25/16
 •	Actually did hear from them, filled out firewall exception request (See doc for #)
 •	They asked if we wanted tcp/port# or udp/port#, I told them I don’t really know but probably tcp. There is nothing in the psiturk docs about either of these.They are putting both just in case.  
-•	Finished consent.html
-• Finished error.html
-•   Finished ad. html
-•   *Try to see if the surveys can be made in psiturk
+•	    Finished consent.html
+•    Finished error.html
+•     Finished ad. html
+•     *Try to see if the surveys can be made in psiturk
 
 8/30/16
-• Firewall request was implemented, still not working. I need to get a static IP address and probably fill out a new firewall exemption request.
+•     Firewall request was implemented, still not working. I need to get a static IP address and probably fill out a new firewall exemption request.
 
