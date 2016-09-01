@@ -1,3 +1,8 @@
+<!Directed Forgetting Task>
+<!Victoria Lawlor>
+<!Last Updated 9/1/16>
+
+
 <!doctype html>
 <html>
   <head>
@@ -45,6 +50,8 @@
   }; 
      var data = [new MyStim("Cat","Forget"), new MyStim("Dog","Remember"), new MyStim("Sour Patch Kids","Never Forget"), new MyStim("Cookies","Remember"), new MyStim("Woogah", "Remember"), new MyStim("WoogWoog","Forget")]
   
+
+  
 /*Shuffle function */
 
   function shuffle(array) {
@@ -66,38 +73,74 @@
     return array;
   };
   
-  // Shuffles the array
+  // Shuffles the stimulus aray
   
   shuffle(data);
+  
 
+//creates the array of words to be displayed in the recog portion. 
+  var recogarray = ["test", "test1", "test2", "test3", "test4", "test5"];
+  
+//adds the words from the stimulus array to the recognition array.
+  for (var k = 0; k<data.length; k++){  
+	  recogarray.push(data[k].word);
+  };
 
-  // Shows the word 
-  /* since the stupid text plugin is meant for reaction time stuff, using single stim to show the text. The word is on the screen for 250ms and there is a 1750ms delay (since the full trial lasts 2000ms and on 250ms of those the stimulus is presented). */
-
-
+//shuffles the recognition array
+  shuffle(recogarray);
+  
+  
+  //function that displays the words in the recognition array following the timing from Norwicka 2009
+  function recog_block (e){
+	  return {
+		  type: "single-stim",
+		  stimulus: stylerecog(e),
+		  is_html: true,
+		  choices:['1','2'],
+		  timing_stim: 250,
+		  timing_response: 3000,
+		  response_ends_trial: false,		  
+	  }
+  };
+  
+  var fixation_block = {
+	  type: "single-stim",
+	  stimulus: "<p style= font-size:100px;text-align:center;padding-top:300px;>"+"+"+"</p>",
+	  is_html: true,
+	  timing_stim: 1000,
+	  timing_response: 1000,
+	  response_ends_trial: false,
+  };
+  
+  var blank_block = {
+	  type: "single-stim",
+	  stimulus: "<p></p>",
+	  is_html: true,
+	  timing_stim: 2750,
+	  timing_response: 2750,
+	  response_ends_trial: false,
+  };
+  
+  //returns the styled word from the stimulus array
   function getword(r){
 	  return "<p style= font-size:100px;text-align:center;padding-top:300px;>"+data[r].word+"</p>";
   };
   
-  function getinstruct(y){
+  //returns the styled instruction from the stimulus array
+  function getinstructword(y){
   	return "<p style= font-size:100px;text-align:center;padding-top:300px;>"+data[y].instruction+"</p>";
   };
-
   
-//  while (i < 80){
-//	  timeline.push(present_words_block);
-//	  place++;
-//	  i++;
-//  }
- // while (i < 80){
-//	  timeline.push(present_words_block);
- // };
-
+  //returns the styled word from the recognition array
+  function stylerecog(y){
+  	return "<p style= font-size:100px;text-align:center;padding-top:300px;>"+recogarray[y]+"</p>";
+  };
  
+  // Function that displays the word in the stimulus array; The word is on the screen for 250ms and there is a 1750ms delay (since the full trial lasts 2000ms and on 250ms of those the stimulus is presented). 
  function getpresent (i)  {
 	 return {
 	 type: "single-stim",
-   stimulus: "<p style= font-size:100px;text-align:center;padding-top:300px;>"+data[i].word+"</p>",
+   stimulus: getword(i),
    is_html: true,
    timing_stim: 250,
    timing_response: 2000,
@@ -105,75 +148,18 @@
 	 }
    };
    
+   //function that displays the instruction in the stimulus array
    function getinstruct (i)  {
   	 return {
   	 type: "single-stim",
-     stimulus: "<p style= font-size:100px;text-align:center;padding-top:300px;>"+data[i].instruction+"</p>",
+     stimulus: getinstructword(i),
      is_html: true,
      timing_stim: 250,
-     timing_response: 2000,
+     timing_response: 250,
      response_ends_trial: false,
   	 }
      };
 
-//var present_words_block = {
-//	  type: "single-stim",
-//	  stimulus: getword(place),
-// 	  is_html: true,
-//  	  timing_stim: 250,
-//	  timing_response: 2000,
-//	  response_ends_trial: false,
-//  };
-  
-  
-//  var present_instruct_block = {
-//	  type: "single-stim",
-//	  stimulus: getinstruct(i),
-//	  is_html: true,
-//	  timing_stim: 250,
-//	  timing_response: 2000,
-//	  response_ends_trial: false,
-//  };
-  
-  //var i = 1;
-  //var place = 0;
- // while (i < 80){
-//	  timeline.push(present_words_block);
-//	  place++;
-//	  i++;
-//  }
-  
-/*
-  
-  var present_words_trial1 = {
-	  type: "single-stim",
-	  stimulus: function() {
-		  return "<p style= font-size:100px;text-align:center>"+data[0].word+"</p>";
-      },
-  	  is_html: true,
-  	  timing_stim: 250,
-	  timing_response: 2000,
-	  response_ends_trial: false,
-  };
-  var present_words_trial2 = {
-	  type: "single-stim",
-	  stimulus: function() {
-		  return "<p style= font-size:100px;text-align:center>"+data[1].word+"</p>";
-      },
-  	  is_html: true,
-  	  timing_stim: 250,
-	  timing_response: 2000,
-	  response_ends_trial: false,
-  };
-  
-   var present_words_block = {
-	   timeline:[
-		   {present_words_trial1},
-		   {present_words_trial2},
-	   ],
-	   loop_function: true,
-   };
-  */
 
   // define the recall instructions
   var recall_instructions_block = {
@@ -182,20 +168,21 @@
   }; 
 
   
-/* define the first recognition instructions*/
+  // define the first recognition instructions
   var recog_instructions_block1 = {
 	  type: "text",
 	  text: "<p>Great! In the final portion of this task, you will be presented with a series of words. The words will be a mix of words presented in the first portion of the task and new words. Your job is to tell us whether you think the word was presented in the first portion of the task, regardless of the instruction that followed it.<br /><br />You will indicate whether you saw the word by pressing the 'p' key for words that you saw in the first phase and pressing the 'q' key for words that you did not.<br /><br />Press any key to continue</p>"
   };
+   
   
-  /* define the second recognition instructions*/
+  // define the second recognition instructions
   var recog_instructions_block2 = {
 	  type: "text",
 	  text: "<p>Remember that you are indicating whether you saw the word previously, <b>regardless of the instruction to remember or forget.</b> So, for example if the word 'dog' is presented, and you remember seeing the word 'dog' but it was followed by an instruction to forget, you would still indicate that you saw the word by pressing 'p'.<br /><br />Remember to press the 'p' key for words you have seen and the 'q' key for words that you have not.<br /><br />Press any key to continue onto the task</p>"
   };
   
-  /* users can type in a textbox and submit their answers*/
-  /* request that users either separate by space or comma*/
+  // users can type in a textbox and submit their answers
+  //need to see if users should 
   var type_answers_block = {
     type: 'survey-text',
     questions: ["Please type ALL words that you remember seeing. Please separate all words with a SPACE."],
@@ -203,39 +190,34 @@
 	  columns: [70]
   };
   
-/*  "The experiment was divided into two separate parts with a short break in between. The first part of the experiment (study phase) consisted of 80 trials and a single trial lasted 6000 ms starting with a fixation mark. After a foreperiod of 1000 ms, the stimulus was displayed for 250 ms. Then after a 1750 ms break, R or F instruction was presented for 250 ms. A set of forty different words was used in each of the two (R, F) experimental conditions. Prior to the study phase, participants were directed to follow the instruction to commit only TBR items to memory and to forget TBF items. The order of experimental trials was pseudo-random with the constraint of no more than three consecutive trials with the same type of instruction." Norwicka_etal_2009 */
-
-  
-
-  
-  /* create the timeline array--MIGHT HAVE TO MOVE THESE UP TO THEIR RESPECTIVE CODE AND ADD THE LOOP ON THE PRESENT_WORDS BLOCK????*/
+  // creates the timeline array
   var timeline = [];
+  //adding to the timeline
   timeline.push(welcome_block);
   timeline.push(instructions_block1);
   timeline.push(instructions_block2);
  
-  for (var i = 0; i<5; i++){  
+ //loops through the stimulus array with words and instructions while there are still some left
+  for (var i = 0; i<data.length; i++){  
+	  timeline.push(fixation_block);
 	  timeline.push(getpresent(i));
 	  timeline.push(getinstruct(i));
   };
   
-//  timeline.push(present_words_block);
   timeline.push(recall_instructions_block);
   timeline.push(type_answers_block);
   timeline.push(recog_instructions_block1);
   timeline.push(recog_instructions_block2);
-
   
-  /* start the experiment */
- /* jsPsych.init({
-	  timeline: timeline,
-	  fullscreen: true
-  });*/
+  //loops through the recogntion array while there are still some left
+  for (var m = 0; m<recogarray.length; m++){
+  	timeline.push(recog_block(m))
+  };
+  
+// initializes the task
   jsPsych.init({
 	timeline: timeline,
-    on_finish: function() {
-      jsPsych.data.displayData();
-    }
+	fullscreen: true,
   });
   </script>
 </html>
