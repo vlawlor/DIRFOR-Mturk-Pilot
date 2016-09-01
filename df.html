@@ -99,6 +99,7 @@
 		  choices:['1','2'],
 		  timing_stim: 250,
 		  timing_response: 3000,
+		  timing_post_trial: 0,
 		  response_ends_trial: false,		  
 	  }
   };
@@ -109,6 +110,7 @@
 	  is_html: true,
 	  timing_stim: 1000,
 	  timing_response: 1000,
+	  timing_post_trial: 0,
 	  response_ends_trial: false,
   };
   
@@ -118,6 +120,7 @@
 	  is_html: true,
 	  timing_stim: 2750,
 	  timing_response: 2750,
+	  timing_post_trial: 0,
 	  response_ends_trial: false,
   };
   
@@ -144,6 +147,7 @@
    is_html: true,
    timing_stim: 250,
    timing_response: 2000,
+   timing_post_trial: 0,
    response_ends_trial: false,
 	 }
    };
@@ -156,6 +160,7 @@
      is_html: true,
      timing_stim: 250,
      timing_response: 250,
+	 timing_post_trial: 0,
      response_ends_trial: false,
   	 }
      };
@@ -202,6 +207,7 @@
 	  timeline.push(fixation_block);
 	  timeline.push(getpresent(i));
 	  timeline.push(getinstruct(i));
+	  timeline.push(blank_block);
   };
   
   timeline.push(recall_instructions_block);
